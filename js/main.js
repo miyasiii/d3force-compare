@@ -9,6 +9,12 @@ let modelFile = "./model/mplate.mtx";
 
 async function loadModelFile(){
   await d3.text(modelFile).then((data) => {
+    let loadingTxt = d3.select("body").append("p")
+      .html("Loading...")
+      .style("position", "fixed")
+      .style("top", "50%")
+      .style("left", "50%")
+
     let pairs = data.split("\n")
     .slice(14) // remove notes
     .map(function(d) { return d.split(" "); });
@@ -30,7 +36,8 @@ async function loadModelFile(){
       return d.source !== d.target;
     });
 
-    d3.select("input").attr("max", masterGraph.links.length);    
+    d3.select("input").attr("max", masterGraph.links.length);
+    loadingTxt.remove();
   }).catch((e) => {
     console.log('error: ', e)
   })
