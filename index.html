@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>d3 force simulation</title>
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <script src="./js/lib/d3.v5.min.js"></script>
+</head>
+
+<body id="main">
+  <div id="app"></div>
+  <form
+    oninput="rangeParam.value=d3.format(',')(parseInt(linksRange.value))" style="width: 99%;" hidden>
+    <label for="linksRange">links(nodes)</label>
+    <output name="rangeParam">100</output>
+    <input type="range" name="linksRange" min=0 max=99999 value=100 step=100 autocomplete="off" style="width: 100%;"></input>
+    <script src="./js/main.js"></script>
+  </form>
+
+</body>
+</html>
