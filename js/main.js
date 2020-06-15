@@ -1,8 +1,8 @@
 const app = document.querySelector("#app");
-let graphDom = null;
+window.graphDom = null;
 let graphSimulation = null;
 let worker = null;
-let graph = {};
+window.graph = {};
 let masterGraph = {};
 let modelFile = "./model/mplate.mtx";
 // let modelFile = "./model/vibrobox.mtx";
@@ -87,11 +87,11 @@ let svgWorkerButton = d3.select("body").append("button")
 })
 
 function sliceGraph(range){
-  graph.links = JSON.parse(JSON.stringify(masterGraph.links.slice(0, range)));
-  let sourceIds = [...graph.links].map(elem => elem.source);
-  let targetIds = [...graph.links].map(elem => elem.target);
+  window.graph.links = JSON.parse(JSON.stringify(masterGraph.links.slice(0, range)));
+  let sourceIds = [...window.graph.links].map(elem => elem.source);
+  let targetIds = [...window.graph.links].map(elem => elem.target);
   let ids = sourceIds.concat(targetIds);
-  graph.nodes = JSON.parse(JSON.stringify(masterGraph.nodes.filter(elem => ids.includes(elem.id))));
+  window.graph.nodes = JSON.parse(JSON.stringify(masterGraph.nodes.filter(elem => ids.includes(elem.id))));
 }
 
 function startCanvas(){
@@ -99,7 +99,7 @@ function startCanvas(){
 
   import('./d3ForceGraphDom.js')
   .then(module => {
-    graphDom = new module.d3ForceGraphDom(app, "canvas");
+    window.graphDom = new module.d3ForceGraphDom(app, "canvas");
   })
   .catch((e) => {
     console.log('error: ', e)
@@ -122,8 +122,8 @@ function startSvg(){
 
   import('./d3ForceGraphDom.js')
   .then(module => {
-    graphDom = new module.d3ForceGraphDom(app, "svg");
-    graphDom.setData();
+    window.graphDom = new module.d3ForceGraphDom(app, "svg");
+    window.graphDom.setData();
   })
   .catch((e) => {
     console.log('error: ', e)
@@ -145,8 +145,8 @@ function startSvgWorker(){
 
   import('./d3ForceGraphDom.js')
   .then(module => {
-    graphDom = new module.d3ForceGraphDom(app, "svg");
-    graphDom.setData();
+    window.graphDom = new module.d3ForceGraphDom(app, "svg");
+    window.graphDom.setData();
   })
   .catch((e) => {
     console.log('error: ', e)
@@ -154,11 +154,11 @@ function startSvgWorker(){
 
   worker = new Worker("./js/worker.js");
   worker.postMessage({command: "setSize", width: document.body.clientWidth, height: document.body.clientHeight});
-  worker.postMessage({command: "setData", data: graph});
+  worker.postMessage({command: "setData", data: window.graph});
   worker.postMessage({command: "start"});
   worker.addEventListener('message', (event) => {
-    graph = event.data;
-    graphDom.update();
+    window.graph = event.data;
+    window.graphDom.update();
   })
 }
 
@@ -166,11 +166,11 @@ d3.select("input").on("change", function() {
   sliceGraph(this.value);
 
   if(d3.select("svg").empty() === false){
-    graphDom.setData();
+    window.graphDom.setData();
   }
   
   if(worker !== null){
-    worker.postMessage({command: "setData", data: graph});
+    worker.postMessage({command: "setData", data: window.graph});
     worker.postMessage({command: "start"});
   }else if(graphSimulation !== null){
     graphSimulation.setData();

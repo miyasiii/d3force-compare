@@ -82,7 +82,7 @@ export class d3ForceGraphDom {
     // nodes
     let graphNodesData = this.#graphNodesGroup
       .selectAll("g")
-      .data(graph.nodes, d => d.id);
+      .data(window.graph.nodes, d => d.id);
 
     let graphNodesEnter = graphNodesData
       .enter()
@@ -105,7 +105,7 @@ export class d3ForceGraphDom {
     // links
     let graphLinksData = this.#graphLinksGroup
       .selectAll("line")
-      .data(graph.links);
+      .data(window.graph.links);
 
     graphLinksData
       .exit()
@@ -125,11 +125,11 @@ export class d3ForceGraphDom {
     if(d3.select("svg").empty() === false){
       let graphNodesData = this.#graphNodesGroup
       .selectAll("g")
-      .data(graph.nodes);
+      .data(window.graph.nodes);
 
     let graphLinksData = this.#graphLinksGroup
       .selectAll("line")
-      .data(graph.links);
+      .data(window.graph.links);
 
     graphLinksData
       .attr("x1", d => d.source.x)
@@ -149,14 +149,14 @@ export class d3ForceGraphDom {
       this.#context.globalAlpha = 0.25;
       this.#context.beginPath();
       this.#context.strokeStyle = "#000";
-      graph.links.forEach( (d) => {
+      window.graph.links.forEach( (d) => {
         this.#context.moveTo(d.source.x, d.source.y);
         this.#context.lineTo(d.target.x, d.target.y);
       });
       this.#context.stroke();
 
       this.#context.globalAlpha = 1;
-      graph.nodes.forEach( (d) => {
+      window.graph.nodes.forEach( (d) => {
         this.#context.fillRect(d.x-1, d.y-1, 2, 2);
       });
       this.#context.restore();

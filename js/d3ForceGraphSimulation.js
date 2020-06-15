@@ -74,18 +74,18 @@ export class d3ForceGraphSimulation {
   }
 
   ticked(){
-    graph = this.#graph;
-    graphDom.update();
+    window.graph = this.#graph;
+    window.graphDom.update();
   }
 
   ended(){
     console.log("simulation ended");
-    graph = this.#graph;
-    graphDom.update();
+    window.graph = this.#graph;
+    window.graphDom.update();
   }
 
   setData(){
-    this.#graph = graph;
+    this.#graph = window.graph;
     this.#simulation
       .nodes(this.#graph.nodes)
       .on("tick", () => this.ticked())
